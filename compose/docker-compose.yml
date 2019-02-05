@@ -9,7 +9,7 @@ services:
             environment:
                 MYSQL_ROOT_PASSWORD: root
             volumes:
-                - "/Users/thomasbourrely/Documents/htdocs/config/mariadb:/var/lib/mysql"
+                - "./../config/mariadb:/var/lib/mysql"
         phpmyadmin:
             image: phpmyadmin/phpmyadmin
             container_name: phpmyadmin
@@ -26,7 +26,7 @@ services:
             container_name: php
             restart: always
             volumes:
-                - "/Users/thomasbourrely/Documents/htdocs/sites:/usr/local/apache2/htdocs"
+                - "./../sites:/usr/local/apache2/htdocs"
             external_links:
                 - mariadb:mariadb
         httpd:
@@ -36,9 +36,9 @@ services:
             ports:
                 - 80:80
             volumes:
-                - "/Users/thomasbourrely/Documents/htdocs/config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf"
-                - "/Users/thomasbourrely/Documents/htdocs/config/apache/vhosts:/usr/local/apache2/conf/vhosts"
-                - "/Users/thomasbourrely/Documents/htdocs/sites:/usr/local/apache2/htdocs"
+                - "./../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+                - "./../config/apache/vhosts:/usr/local/apache2/conf/vhosts"
+                - "./../sites:/usr/local/apache2/htdocs"
             external_links:
                 - mariadb:mariadb
                 - php:php
