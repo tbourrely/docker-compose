@@ -1,0 +1,5 @@
+sites/*/
+config/apache/vhosts/*
+config/mariadb/*
+!config/mariadb/.gitkeep
+!config/apache/vhosts/000-default.conf

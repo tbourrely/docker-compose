@@ -1,0 +1,45 @@
+version: '3.2'
+services:
+        mariadb:
+            image: mariadb
+            container_name: mariadb
+            restart: always
+            ports:
+                - 3306:3306
+            environment:
+                MYSQL_ROOT_PASSWORD: root
+            volumes:
+                - "/Users/thomasbourrely/Documents/htdocs/config/mariadb:/var/lib/mysql"
+        phpmyadmin:
+            image: phpmyadmin/phpmyadmin
+            container_name: phpmyadmin
+            restart: always
+            ports:
+                - 8001:80
+            environment:
+                - "PMA_HOST=mariadb"
+                - "PMA_PORT=3306"
+            external_links:
+                - mariadb:mariadb
+        php:
+            build: ./build/php/
+            container_name: php
+            restart: always
+            volumes:
+                - "/Users/thomasbourrely/Documents/htdocs/sites:/usr/local/apache2/htdocs"
+            external_links:
+                - mariadb:mariadb
+        httpd:
+            image: httpd:latest
+            container_name: apache
+            restart: always
+            ports:
+                - 80:80
+            volumes:
+                - "/Users/thomasbourrely/Documents/htdocs/config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+                - "/Users/thomasbourrely/Documents/htdocs/config/apache/vhosts:/usr/local/apache2/conf/vhosts"
+                - "/Users/thomasbourrely/Documents/htdocs/sites:/usr/local/apache2/htdocs"
+            external_links:
+                - mariadb:mariadb
+                - php:php
+                - phpmyadmin:phpmyadmin
