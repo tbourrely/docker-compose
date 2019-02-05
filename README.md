@@ -1,4 +1,4 @@
-# configuration
+# Configuration
 
 | container | ports | volumes |
 |-----------|:-----:|---------|
