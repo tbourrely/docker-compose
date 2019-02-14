@@ -32,3 +32,7 @@ RUN set -ex; \
 	\
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*
+
+
+#COPY config/php.ini $PHP_INI_DIR/
+ADD config/php.ini $PHP_INI_DIR/
