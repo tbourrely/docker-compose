@@ -9,7 +9,7 @@ services:
             environment:
                 MYSQL_ROOT_PASSWORD: root
             volumes:
-                - "./../config/mariadb:/var/lib/mysql"
+                    - "./../config/mariadb:/var/lib/mysql:delegated"
         phpmyadmin:
             image: phpmyadmin/phpmyadmin
             container_name: phpmyadmin
@@ -26,7 +26,7 @@ services:
             container_name: php
             restart: always
             volumes:
-                - "./../sites:/usr/local/apache2/htdocs"
+                    - "./../sites:/usr/local/apache2/htdocs:cached"
             external_links:
                 - mariadb:mariadb
         httpd:
@@ -36,9 +36,9 @@ services:
             ports:
                 - 80:80
             volumes:
-                - "./../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf"
-                - "./../config/apache/vhosts:/usr/local/apache2/conf/vhosts"
-                - "./../sites:/usr/local/apache2/htdocs"
+                    - "./../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:cached"
+                    - "./../config/apache/vhosts:/usr/local/apache2/conf/vhosts:cached"
+                    - "./../sites:/usr/local/apache2/htdocs:cached"
             external_links:
                 - mariadb:mariadb
                 - php:php
