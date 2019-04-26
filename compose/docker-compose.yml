@@ -1,45 +1,51 @@
 version: '3.2'
 services:
-        mariadb:
-            image: mariadb
-            container_name: mariadb
-            restart: always
-            ports:
-                - 3306:3306
-            environment:
-                MYSQL_ROOT_PASSWORD: root
-            volumes:
-                    - "./../config/mariadb:/var/lib/mysql:delegated"
-        phpmyadmin:
-            image: phpmyadmin/phpmyadmin
-            container_name: phpmyadmin
-            restart: always
-            ports:
-                - 8001:80
-            environment:
-                - "PMA_HOST=mariadb"
-                - "PMA_PORT=3306"
-            external_links:
-                - mariadb:mariadb
-        php:
-            build: ./build/php/
-            container_name: php
-            restart: always
-            volumes:
-                    - "./../sites:/usr/local/apache2/htdocs:cached"
-            external_links:
-                - mariadb:mariadb
-        httpd:
-            image: httpd:latest
-            container_name: apache
-            restart: always
-            ports:
-                - 80:80
-            volumes:
-                    - "./../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:cached"
-                    - "./../config/apache/vhosts:/usr/local/apache2/conf/vhosts:cached"
-                    - "./../sites:/usr/local/apache2/htdocs:cached"
-            external_links:
-                - mariadb:mariadb
-                - php:php
-                - phpmyadmin:phpmyadmin
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - './../config/mariadb:/var/lib/mysql:delegated'
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - '8001:80'
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    external_links:
+      - 'mariadb:mariadb'
+  php:
+    build: ./build/php/
+    container_name: php
+    restart: always
+    volumes:
+      - './../sites:/usr/local/apache2/htdocs:cached'
+      - './../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:cached'
+      - './../config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:cached'
+      - 'sock:/sock'
+    external_links:
+      - 'mariadb:mariadb'
+  httpd:
+    image: 'httpd:latest'
+    container_name: apache
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - './../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:cached'
+      - './../config/apache/vhosts:/usr/local/apache2/conf/vhosts:cached'
+      - './../sites:/usr/local/apache2/htdocs:cached'
+      - 'sock:/sock'
+    external_links:
+      - 'mariadb:mariadb'
+      - 'php:php'
+      - 'phpmyadmin:phpmyadmin'
+volumes:
+    sock:
