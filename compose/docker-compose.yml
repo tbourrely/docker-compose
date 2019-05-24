@@ -3,7 +3,7 @@ services:
   mariadb:
     image: mariadb
     container_name: mariadb
-    restart: always
+    restart: on-failure
     ports:
       - '3306:3306'
     environment:
@@ -13,7 +13,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
-    restart: always
+    restart: on-failure
     ports:
       - '8001:80'
     environment:
@@ -22,9 +22,9 @@ services:
     external_links:
       - 'mariadb:mariadb'
   php:
-    build: ./build/php/
+    build: ./build/php7.2/
     container_name: php
-    restart: always
+    restart: on-failure
     volumes:
       - './../sites:/usr/local/apache2/htdocs:cached'
       - './../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:cached'
@@ -35,7 +35,7 @@ services:
   httpd:
     image: 'httpd:latest'
     container_name: apache
-    restart: always
+    restart: on-failure
     ports:
       - '80:80'
     volumes:
