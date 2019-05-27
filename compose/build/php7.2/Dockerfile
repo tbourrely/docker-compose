@@ -12,12 +12,13 @@ RUN set -ex; \
 		libzip-dev \
 		libxml2-dev \
 		libcurl4-openssl-dev \
+    libssl-dev \ 
 		curl \
 	; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	docker-php-ext-install gd mysqli zip; \
-	docker-php-ext-install pdo pdo_mysql xml curl; \
+	docker-php-ext-install pdo pdo_mysql xml curl phar; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
