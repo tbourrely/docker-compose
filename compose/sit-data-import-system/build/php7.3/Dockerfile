@@ -1,4 +1,4 @@
-FROM php:7.3.6-zts
+FROM php:7.3.6-fpm
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -17,22 +17,9 @@ RUN set -ex; \
 		curl \
 		git \
 		libmagickwand-dev \
-		g++ \
-		make \
-		autoconf \
 	; \
 	pecl install imagick; \
-#	pecl install pthreads; \
-        
-	curl -sSL https://github.com/krakjoe/pthreads/archive/master.zip -o /tmp/pthreads.zip \
-        && unzip /tmp/pthreads.zip -d /tmp \
-        && cd /tmp/pthreads-* \
-        && phpize \
-        && ./configure \
-        && make \
-        && make install \
-        && rm -rf /tmp/pthreads*; \
- 	curl --silent --show-error https://getcomposer.org/installer | php; \
+	curl --silent --show-error https://getcomposer.org/installer | php; \
 	chmod +x composer.phar && mv composer.phar /usr/local/bin/composer; \
 	\
 #	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
@@ -40,7 +27,6 @@ RUN set -ex; \
 	docker-php-ext-install mysqli zip; \
 	docker-php-ext-install pdo pdo_mysql xml curl phar; \
 	docker-php-ext-enable imagick; \
-	docker-php-ext-enable pthreads; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
