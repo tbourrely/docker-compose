@@ -1,5 +1,11 @@
 version: '3.2'
 services:
+  redis: 
+    image: redis
+    container_name: redis
+    restart: on-failure
+    ports: 
+      - '6379:6379'
   mariadb:
     image: mariadb
     container_name: mariadb
@@ -9,7 +15,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - './../config/mariadb:/var/lib/mysql:delegated'
+      - './../../config/mariadb:/var/lib/mysql:delegated'
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -26,9 +32,9 @@ services:
     container_name: php
     restart: on-failure
     volumes:
-      - './../sites:/usr/local/apache2/htdocs:cached'
-      - './../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:cached'
-      - './../config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:cached'
+      - './../../sites:/usr/local/apache2/htdocs:cached'
+      - './../../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:cached'
+      - './../../config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:cached'
       - 'sock:/sock'
     external_links:
       - 'mariadb:mariadb'
@@ -39,13 +45,13 @@ services:
     ports:
       - '80:80'
     volumes:
-      - './../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:cached'
-      - './../config/apache/vhosts:/usr/local/apache2/conf/vhosts:cached'
-      - './../sites:/usr/local/apache2/htdocs:cached'
+      - './../../config/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:cached'
+      - './../../config/apache/vhosts:/usr/local/apache2/conf/vhosts:cached'
+      - './../../sites:/usr/local/apache2/htdocs:cached'
       - 'sock:/sock'
     external_links:
       - 'mariadb:mariadb'
       - 'php:php'
       - 'phpmyadmin:phpmyadmin'
 volumes:
-    sock:
+  sock:
