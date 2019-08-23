@@ -22,7 +22,7 @@ services:
     external_links:
       - 'mariadb:mariadb'
   php:
-    build: ./build/php7.3/
+    build: ./build/php7.2/
     container_name: php
     restart: on-failure
     volumes:

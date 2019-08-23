@@ -36,8 +36,9 @@ services:
       - './../../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:cached'
       - './../../config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:cached'
       - 'sock:/sock'
-    external_links:
-      - 'mariadb:mariadb'
+        #external_links:
+        #- 'mariadb:mariadb'
+    network_mode: 'host'
   httpd:
     image: 'httpd:latest'
     container_name: apache
